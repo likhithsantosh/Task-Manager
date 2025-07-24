@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Tasks</title>
+  <link rel="stylesheet" href="/stylesheet/yourtasks.css">
+
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">🗂️ TaskManager</div>
+    <div class="nav-links">
+      <a href="/html/home.html">Home</a>
+      <a href="/html/login.html">Login</a>
+      <a href="/html/registration.html">Register</a>
+      <a href="/html/about.html">About</a>
+    </div>
+  </nav>
+
+  <div class="task-container">
+    <h2>Your Tasks</h2>
+    <div id="taskList"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        fetch('/api/tasks', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
+          },
+          body: JSON.stringify(taskData)
+        })
+        .then(res =>res.json())
+        .then(data =>{
+            const container = document.getElementById('taskList');
+
+            if(data.length === 0){
+                container.innerHTML = '<p>No tasks available.</p>';
+                return;
+            }
+
+            data.forEach(task =>{
+                const div = document.createElement('div');
+                div.className='task-card';
+                div.innerHTML= ` <h3> ${task.title} </h3>
+                <p> ${task.description} </p>
+                <small> Date: ${task.date} </small>`;
+                
+                // create a edit button
+
+                const editbtn = document.createElement('button');
+                editbtn.textContent ='Edit';
+                editbtn.classList.add("edit-btn");
+                editbtn.onclick= async()=>{
+                  const newtitle = prompt('enter a new title',task.title);
+                  const newdescription = prompt('enter a new description', task.description);
+                  const newdate = prompt('enter a new date', task.date);
+
+                  if(!newtitle || !newdescription || !newdate){
+                    alert("all fields are required");
+                    return;
+                  }
+                  const res = await fetch(`/api/tasks/${task.id}`,{
+                    method: 'PUT',
+                    headers: {
+                      'Content-Type': 'application/json'},
+                      body: JSON.stringify({
+                        title: newtitle,
+                        description: newdescription,
+                        date: newdate
+                  })
+                  });
+                  const result = await res.json();
+                  alert(result.message || 'task updated');
+                  location.reload();
+                };
+                // create a delete button
+
+                const deletebtn = document.createElement('button');
+                deletebtn.textContent= 'Delete';
+                deletebtn.classList.add("delete-btn");
+                deletebtn.onclick = () => deleteTask(task.id);
+
+                div.appendChild(editbtn);
+                div.appendChild(deletebtn);
+                container.appendChild(div);
+            });
+        })
+        .catch(error =>{
+            console.error('Error fetching tasks:', error);
+
+        });
+
+        });
+
+        function deleteTask(id){
+          fetch(`/api/tasks/${id}`,{
+            method: 'DELETE'
+          })
+          .then(res => res.json())
+          .then(data =>{
+            alert(data.message);
+            location.reload(); //reload the page to reflect changes
+          })
+          .catch(err => alert('error deleting the task'));
+        }
+
+        function editTask(id){
+          const title = prompt('Enter new title:');
+          const description = prompt('Enter new description:');
+          const date = prompt('Enter new date:(YYYY-MM-DD)');
+
+          if(!title || !description || !date){
+            alert('all fields are required');
+            return;
+          }
+
+          fetch(`/api/tasks/${id}`,{
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ title, description, date})
+          })
+          .then(res => res.json())
+          .then(data =>{
+            alert('task updated');
+            location.reload();
+        })
+        .catch(error => alert('error updating a task'));
+      }
+
+  </script>
+</body>
+</html>

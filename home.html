@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Task Manager</title>
+  <link rel="stylesheet" href="/stylesheet/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- 🔹 Navbar -->
+  <nav class="navbar">
+    <div class="logo">🗂️ TaskManager</div>
+    <div class="nav-links">
+      <a href="/html/login.html">Login</a>
+      <a href="/html/registration.html">Register</a>
+      <a href="/html/yourtasks.html">Your Tasks</a>
+      <a href="/html/about.html">About</a>
+    </div>
+  </nav>
+
+  <!-- 🔸 Main Heading -->
+  <header class="hero">
+    <h1>Welcome to Task <span class="blinking">Manager</span></h1>
+    <p class="subtext">Organize your day, the smart way!</p>
+  </header>
+
+  <!-- 🔹 Add Task Form -->
+  <section class="task-form">
+    <h2>📝 Add a New Task</h2>
+    <form id="taskForm">
+      <input type="text" name="title" placeholder="Task Title" required />
+      <textarea  name="description" placeholder="Task Description" required></textarea>
+      <input name="date" type="date" required />
+      <button type="submit">Add Task</button>
+    </form>
+  </section>
+
+  <!-- 🔸 Stylish Button Above Footer -->
+  <div class="task-button">
+    <a href="/html/yourtasks.html">View Your Tasks</a>
+  </div>
+
+  <!-- 🔹 Footer -->
+  <footer>
+    <p>Developed by <strong>Likhith</strong> | Contact: <a href="mailto:abcd@gmail.com">abcd@gmail.com</a></p>
+  </footer>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () =>{
+      document.getElementById('taskForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const formdata = {
+        title: this.title.value,
+        description: this.description.value,
+        date : this.date.value
+      };
+      try{
+        const res = await fetch('/api/tasks',{
+          method: 'POST',
+          headers :{
+            'Content-Type': 'application/json'},
+            body:JSON.stringify(formdata)
+          });
+
+          const result = await res.json();
+
+          if(res.ok){
+            alert('task added sucessfully');
+            this.reset(); //clear the form
+          }
+          else{
+            alert('failed to add the task' + result.message);
+          }
+        }
+        catch(error){
+          console.error(error);
+          alert('something went wrong while adding the task');
+        }
+      
+    });
+    })
+  </script>
+</body>
+</html>

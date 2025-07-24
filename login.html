@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Task Manager</title>
+  <link rel="stylesheet" href="/stylesheet/login.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+  <!-- 🔹 Navbar -->
+  <nav class="navbar">
+    <div class="logo">🗂️ TaskManager</div>
+    <div class="nav-links">
+      <a href="/html/home.html">Home</a>
+      <a href="/html/registration.html">Register</a>
+      <a href="/html/yourtasks.html">Your Tasks</a>
+      <a href="/html/about.html">About</a>
+    </div>
+  </nav>
+
+  <!-- 🔸 Login Box -->
+  <div class="login-container">
+    <h2>Login to Task Manager</h2>
+    <form id="loginform">
+      <label for="username">Username</label>
+      <input type="text" name="name" id="username" placeholder="Enter your name" required />
+
+      <label for="password">Password</label>
+      <div class="password-field">
+        <input type="password" name="password" id="password" placeholder="Enter your password" required />
+        <span class="toggle-eye" onclick="togglePassword()">
+          <i class="fas fa-eye" id="eyeIcon"></i>
+        </span>
+      </div>
+
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <script>
+    function togglePassword() {
+      const password = document.getElementById("password");
+      const eyeIcon = document.getElementById("eyeIcon");
+      if (password.type === "password") {
+        password.type = "text";
+        eyeIcon.classList.remove("fa-eye");
+        eyeIcon.classList.add("fa-eye-slash");
+      } else {
+        password.type = "password";
+        eyeIcon.classList.remove("fa-eye-slash");
+        eyeIcon.classList.add("fa-eye");
+      }
+    }
+    document.getElementById('loginform').addEventListener('submit', async function (e){
+      e.preventDefault();
+
+      const name = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try{
+      const res = await fetch('/api/login',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+          
+          },
+          body: JSON.stringify({name, password})
+      });
+
+      const result = await res.json();
+
+      if(res.ok){
+        
+        localStorage.setItem('token', result.token);
+
+        localStorage.setItem('username', result.user.name);
+
+        alert("login succesful");
+        
+        window.location.href= '/html/home.html';
+      }
+      else{
+        alert("login failed");
+      }
+    }catch(err){
+      alert('something went wrong during the login');
+      console.error(error);
+    }
+
+    });
+    
+  </script>
+</body>
+</html>

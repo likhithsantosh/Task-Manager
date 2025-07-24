@@ -1,0 +1,87 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #000;
+  color: #fff;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  background: #1a1a1a;
+  padding: 1rem 2rem;
+}
+
+.nav-links a {
+  color: #eee;
+  text-decoration: none;
+  margin-left: 20px;
+}
+
+.task-container {
+  padding: 40px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.task-card {
+  background: #1c1c1c;
+  margin: 15px 0;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+.task-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.task-card h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.task-card p {
+  margin: 0.5rem 0;
+  color: #555;
+}
+
+.task-card small {
+  display: block;
+  margin-bottom: 1rem;
+  color: #888;
+}
+
+.task-card button {
+  padding: 8px 14px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  color: #fff;
+  background-color: #000; /* Black background */
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.task-card button:hover {
+  background-color: #333;
+  transform: scale(1.05);
+}
+.task-card button.edit-btn {
+  background-color: #000;
+}
+
+.task-card button.delete-btn {
+  background-color: #000;
+}
+
+.task-card button.edit-btn:hover,
+.task-card button.delete-btn:hover {
+  background-color: #222;
+}
