@@ -1,7 +1,7 @@
 require('dotenv').config(); // Needed here if you're using PORT from .env
 
 const express = require('express');
-const connectdd = require('./config/db');
+const connectdd = require('./babai/db');
 const path = require('path');
 
 const taskroutes = require('./routes/taskroutes');
