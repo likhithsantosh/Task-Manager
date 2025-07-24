@@ -1,7 +1,7 @@
 require('dotenv').config(); // Needed here if you're using PORT from .env
 
 const express = require('express');
-const connectDB = require('/config/db');
+const connectdd = require('./config/db');
 const path = require('path');
 
 const taskroutes = require('./routes/taskroutes');
@@ -9,7 +9,7 @@ const userroutes = require('./routes/routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-connectDB();
+connectdd();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
